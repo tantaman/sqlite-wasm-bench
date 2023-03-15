@@ -1,0 +1,10 @@
+[
+  "ccall",
+  "cwrap",
+  "getTempRet0",
+  "getValue",
+  "setValue",
+  "UTF8ToString",
+  "stringToUTF8",
+  "lengthBytesUTF8"
+]

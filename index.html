@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Bench official SQLite3 WASM</title>
+</head>
+
+<body>
+  <script src="jswasm/sqlite3-worker1-promiser.js"></script>
+  <script src="bench.js"></script>
+  <p>
+    Real world benchmark that queries from the UI thread and pulls data back into the UI thread.
+    I.e., a full round trip.
+  </p>
+  <p>
+    The official SQLite looks to under-perform WA-SQLite IDBBatchAtomic (i.e., persistence with indexeddb)
+    https://rhashimoto.github.io/wa-sqlite/demo/benchmarks.html for a large number of operations.
+
+    We need to find that inflection point.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Test</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="test-out">
+    </tbody>
+  </table>
+</body>
+
+</html>
