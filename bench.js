@@ -84,12 +84,16 @@ async function test1() {
   await promiser("exec", {
     sql: `CREATE TABLE t1(a INTEGER, b INTEGER, c VARCHAR(100));`,
   });
+  const promises = [];
   for (let i = 0; i < 1000; ++i) {
     const n = Math.floor(Math.random() * 100000);
-    await promiser("exec", {
-      sql: `INSERT INTO t1 VALUES(${i + 1}, ${n}, '${numberName(n)}');`,
-    });
+    promises.push(
+      promiser("exec", {
+        sql: `INSERT INTO t1 VALUES(${i + 1}, ${n}, '${numberName(n)}');`,
+      })
+    );
   }
+  await Promise.all(promises);
 }
 
 // Test 2: 25000 INSERTs in a transaction
@@ -144,15 +148,19 @@ async function test4() {
     BEGIN;
   `,
   });
+  const promises = [];
   for (let i = 0; i < 100; ++i) {
-    await promiser("exec", {
-      sql: `
+    promises.push(
+      promiser("exec", {
+        sql: `
       SELECT count(*), avg(b) FROM t2 WHERE b>=${i * 100} AND b<${
-        i * 100 + 1000
-      };
+          i * 100 + 1000
+        };
     `,
-    });
+      })
+    );
   }
+  await Promise.all(promises);
   await promiser("exec", {
     sql: `
     COMMIT;
@@ -198,15 +206,19 @@ async function test7() {
     BEGIN;
   `,
   });
+  const promises = [];
   for (let i = 0; i < 5000; ++i) {
-    await promiser("exec", {
-      sql: `
+    promises.push(
+      promiser("exec", {
+        sql: `
       SELECT count(*), avg(b) FROM t2 WHERE b>=${i * 100} AND b<${
-        i * 100 + 100
-      };
+          i * 100 + 100
+        };
     `,
-    });
+      })
+    );
   }
+  await Promise.all(promises);
   await promiser("exec", {
     sql: `
     COMMIT;
@@ -242,14 +254,18 @@ async function test9() {
     BEGIN;
   `,
   });
+  const promises = [];
   for (let i = 0; i < 25000; ++i) {
     const n = Math.floor(Math.random() * 100000);
-    await promiser("exec", {
-      sql: `
+    promises.push(
+      promiser("exec", {
+        sql: `
       UPDATE t2 SET b=${n} WHERE a=${i + 1};
     `,
-    });
+      })
+    );
   }
+  await Promise.all(promises);
   await promiser("exec", {
     sql: `
     COMMIT;
